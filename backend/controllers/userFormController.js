@@ -1,8 +1,9 @@
 const asyncHandler = require('express-async-handler')
 const Form = require('../models/formModel')
+const User = require('../models/userModel')
 
 const getUserForms = asyncHandler( async (req, res) => {
-    const forms = await Form.find()
+    const forms = await Form.find({ user: req.user.id })
 
     res.status(200).json(forms)
 } )
@@ -18,8 +19,9 @@ const postUserForms = asyncHandler( async (req, res) => {
     }
 
     const form = await Form.create({
-        name: req.body.name,
-        text: req.body.text
+        name: req.user.name,
+        text: req.body.text,
+        user: req.user.id
     })
 
     res.status(200).json(form)
@@ -31,6 +33,19 @@ const updateUserForms = asyncHandler( async (req, res) => {
     if (!form) {
         res.status(400)
         throw new Error('Goal not found')
+    }
+
+    const user = await User.findById(req.user.id)
+    
+    // Check for user
+    if (!user) {
+        res.status(401)
+        throw new Error('User not found')
+    }
+    // Make sure the logged in user matches the user that posted 
+    if (form.user.toString() !== user.id) {
+        res.status(401)
+        throw new Error('User nlt authorizes')
     }
 
     const updatedForm = await Form.findByIdAndUpdate(req.params.id, req.body, {
@@ -45,6 +60,19 @@ const deleteUserForms = asyncHandler( async (req, res) => {
     if (!form) {
         res.status(400)
         throw new Error('Goal not found')
+    }
+
+    const user = await User.findById(req.user.id)
+    
+    // Check for user
+    if (!user) {
+        res.status(401)
+        throw new Error('User not found')
+    }
+    // Make sure the logged in user matches the user that posted 
+    if (form.user.toString() !== user.id) {
+        res.status(401)
+        throw new Error('User nlt authorizes')
     }
 
     await form.remove()
