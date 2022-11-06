@@ -1,40 +1,40 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const asyncHandler = require("express-async-handler")
-const User = require('../models/userModel')
+const Admin = require('../models/adminModel')
 
-const registerUser = asyncHandler( async (req, res) => {
+const registerAdmin = asyncHandler( async (req, res) => {
     const { name, email, password } = req.body
+
     if (!name || !email || !password) {
         res.status(400)
         throw new Error("Please fill in all fields")
     }
 
     // Check if user exists
-    const userExists = await User.findOne({email})
+    const userExists = await Admin.findOne({email})
 
     if (userExists) {
         res.status(400)
         throw new Error("User already exists")
     }
-
     // Hash password
     const salt = await bcrypt.genSalt(10)
     const hashedPassword = await bcrypt.hash(password, salt)
 
     // Create user
-    const user = await User.create({
+    const admin = await Admin.create({
         name, 
-        email,
+        email, 
         password: hashedPassword
     })
 
-    if (user) {
+    if (admin) {
         res.status(201).json({
-            _id: user.id,
-            name: user.name,
-            email: user.email,
-            token: generateToken(user._id)
+            _id: admin.id,
+            name: admin.name,
+            email: admin.email,
+            token: generateToken(admin._id)
         })
     } else {
         res.status(400)
@@ -42,10 +42,10 @@ const registerUser = asyncHandler( async (req, res) => {
     }
 })
 
-const loginUser = asyncHandler( async (req, res) => {
+const loginAdmin = asyncHandler( async (req, res) => {
     const {email, password} = req.body
 
-    const user = await User.findOne({email})
+    const user = await Admin.findOne({email})
 
     if (user && (await bcrypt.compare(password, user.password))) {
         res.json({
@@ -58,12 +58,11 @@ const loginUser = asyncHandler( async (req, res) => {
         res.status(400)
         throw new Error("Invalid Credentials")
     }
-
 })
 
-const getUser = asyncHandler( async (req, res) => {
-
-    res.status(200).json(req.user)
+const getAdmin = asyncHandler( async (req, res) => {
+    console.log('user data')
+    res.status(200).json(req.admin)
 })
 
 const generateToken = (id) => {
@@ -73,7 +72,7 @@ const generateToken = (id) => {
 }
 
 module.exports = {
-    registerUser,
-    loginUser,
-    getUser
+    registerAdmin,
+    loginAdmin,
+    getAdmin
 }

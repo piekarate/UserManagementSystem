@@ -13,10 +13,6 @@ const postUserForms = asyncHandler( async (req, res) => {
         res.status(400)
         throw new Error('Add a text field')
     }
-    if (!req.body.name) {
-        res.status(400)
-        throw new Error('Add a name field')
-    }
 
     const form = await Form.create({
         name: req.user.name,
