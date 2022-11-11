@@ -61,9 +61,10 @@ const loginAdmin = asyncHandler( async (req, res) => {
 })
 
 const getAdmin = asyncHandler( async (req, res) => {
-    console.log('user data')
     res.status(200).json(req.admin)
 })
+
+
 
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {

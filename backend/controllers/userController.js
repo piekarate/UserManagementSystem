@@ -2,13 +2,23 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const asyncHandler = require("express-async-handler")
 const User = require('../models/userModel')
+const Admin = require('../models/adminModel')
 
 const registerUser = asyncHandler( async (req, res) => {
-    const { name, email, password } = req.body
-    if (!name || !email || !password) {
+    const { name, email, password, adminEmail} = req.body
+    if (!name || !email || !password || !adminEmail) {
         res.status(400)
         throw new Error("Please fill in all fields")
     }
+    // Check if admin user exists
+    const adminExists = await Admin.findOne({email: adminEmail})
+    
+    if (!adminExists) {
+        res.status(400)
+        throw new Error("Admin User does not exist")
+    }
+    // Get the needed admin ID
+    const adminID = adminExists._id
 
     // Check if user exists
     const userExists = await User.findOne({email})
@@ -22,11 +32,14 @@ const registerUser = asyncHandler( async (req, res) => {
     const salt = await bcrypt.genSalt(10)
     const hashedPassword = await bcrypt.hash(password, salt)
 
+    //
+
     // Create user
     const user = await User.create({
         name, 
         email,
-        password: hashedPassword
+        password: hashedPassword,
+        adminID: adminID
     })
 
     if (user) {
@@ -34,6 +47,7 @@ const registerUser = asyncHandler( async (req, res) => {
             _id: user.id,
             name: user.name,
             email: user.email,
+            adminID: user.adminId,
             token: generateToken(user._id)
         })
     } else {
