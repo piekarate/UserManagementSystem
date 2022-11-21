@@ -18,6 +18,10 @@ const userSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: "Admin"
+    },
+    privileges: {
+        type: Boolean,
+        default: false
     }
 }, 
 {

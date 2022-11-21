@@ -6,14 +6,13 @@ function Dashboard() {
 
   const navigate = useNavigate()
 
-  const {admin} = useSelector((state) => state.auth)
+  const {user} = useSelector((state) => state.auth)
 
   useEffect(() => {
-    if (!admin) {
-      console.log(admin)
+    if (!user) {
       navigate('/login')
     }
-  }, [admin, navigate])
+  }, [user, navigate])
 
   return (
     <div>Dashboard</div>

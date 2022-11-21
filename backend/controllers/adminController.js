@@ -26,7 +26,8 @@ const registerAdmin = asyncHandler( async (req, res) => {
     const admin = await Admin.create({
         name, 
         email, 
-        password: hashedPassword
+        password: hashedPassword,
+        privileges: true
     })
 
     if (admin) {

@@ -4,15 +4,17 @@ import {useSelector, useDispatch} from 'react-redux'
 import {useNavigate} from 'react-router-dom'
 import {toast} from 'react-toastify'
 import {login, reset} from '../features/auth/admin/authSlice'
+import {userLogin, userReset} from '../features/auth/user/authSlice'
 import Spinner from '../components/Spinner'
 
 function Login() {
     const [formData, setFormData] = useState({
         email: '',
         password: '',
+        status: ''
     })
 
-    const {email, password} = formData
+    const {email, password, status} = formData
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -46,8 +48,11 @@ function Login() {
         const userData = {
             email, password
         }
-
-        dispatch(login(userData))
+        if (status === 'admin') {
+            dispatch(login(userData))
+        } else {
+            dispatch(userLogin(userData))
+        }
     }
 
     if (isLoading) {
@@ -64,6 +69,28 @@ function Login() {
 
         <section className="form">
             <form onSubmit={onSubmit} >
+            <ul>
+                    <li>
+                        <input 
+                        type='radio'
+                        className='form-control'
+                        id='userStatus'
+                        name='status'
+                        value="user"
+                        onChange={onChange} 
+                        /> User
+                    </li>
+                    <li>
+                        <input 
+                        type='radio'
+                        className='form-control'
+                        id='adminStatus'
+                        name='status'
+                        value="admin"
+                        onChange={onChange}
+                        /> Admin
+                    </li>
+                </ul>
                 <div className='form-group'>
                         <input 
                             type="email" 

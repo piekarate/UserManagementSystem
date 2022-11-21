@@ -3,11 +3,11 @@ import axios from 'axios'
 const API_URL = '/api/admins/'
 
 // Register admin
-const register = async (adminData) => {
-    const response = await axios.post(API_URL, adminData)
+const register = async (userData) => {
+    const response = await axios.post(API_URL, userData)
 
     if(response.data) {
-        localStorage.setItem('admin', JSON.stringify(response.data))
+        localStorage.setItem('user', JSON.stringify(response.data))
 
     }
 
@@ -15,11 +15,11 @@ const register = async (adminData) => {
 }
 
 // Login admin
-const login = async (adminData) => {
-    const response = await axios.post(API_URL + 'login', adminData)
+const login = async (userData) => {
+    const response = await axios.post(API_URL + 'login', userData)
 
     if(response.data) {
-        localStorage.setItem('admin', JSON.stringify(response.data))
+        localStorage.setItem('user', JSON.stringify(response.data))
 
     }
 
@@ -28,7 +28,7 @@ const login = async (adminData) => {
 
 // Logout user
 const logout = () => {
-    localStorage.removeItem('admin')
+    localStorage.removeItem('user')
 }
 
 const authService = {
