@@ -15,7 +15,13 @@ function Dashboard() {
   }, [user, navigate])
 
   return (
-    <div>Dashboard</div>
+    <>
+      {user && user.privileges ? (  
+        <div>Admin Dashboard</div>
+      ) : (
+        <div>User Dashboard</div> 
+      )}
+    </>
   )
 }
 

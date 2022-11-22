@@ -35,7 +35,8 @@ const registerAdmin = asyncHandler( async (req, res) => {
             _id: admin.id,
             name: admin.name,
             email: admin.email,
-            token: generateToken(admin._id)
+            token: generateToken(admin._id),
+            privileges:  admin.privileges
         })
     } else {
         res.status(400)
@@ -46,14 +47,15 @@ const registerAdmin = asyncHandler( async (req, res) => {
 const loginAdmin = asyncHandler( async (req, res) => {
     const {email, password} = req.body
 
-    const user = await Admin.findOne({email})
+    const admin = await Admin.findOne({email})
 
-    if (user && (await bcrypt.compare(password, user.password))) {
+    if (admin && (await bcrypt.compare(password, admin.password))) {
         res.json({
-            _id: user.id,
-            name: user.name,
-            email: user.email,
-            token: generateToken(user._id)
+            _id: admin.id,
+            name: admin.name,
+            email: admin.email,
+            token: generateToken(admin._id),
+            privileges:  admin.privileges
         })
     } else {
         res.status(400)
