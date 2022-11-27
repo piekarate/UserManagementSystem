@@ -78,6 +78,7 @@ function Login() {
                         name='status'
                         value="user"
                         onChange={onChange} 
+                        checked
                         /> User
                     </li>
                     <li>

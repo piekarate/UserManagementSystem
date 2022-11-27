@@ -1,6 +1,8 @@
 import {useEffect} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {useSelector} from 'react-redux'
+import AdminDashboard from '../components/dashboard/AdminDashboard'
+import UserDashboard from '../components/dashboard/UserDashboard'
 
 function Dashboard() {
 
@@ -17,9 +19,10 @@ function Dashboard() {
   return (
     <>
       {user && user.privileges ? (  
-        <div>Admin Dashboard</div>
+        <AdminDashboard user={user}/>
       ) : (
-        <div>User Dashboard</div> 
+        <UserDashboard user={user}/>
+      
       )}
     </>
   )
