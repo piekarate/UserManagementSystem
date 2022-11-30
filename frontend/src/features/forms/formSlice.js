@@ -10,10 +10,10 @@ const initialState = {
 }
 
 // Create new form
-export const createForm = createAsyncThunk('forms/create', async (goalData, thunkAPI) => {
+export const createForm = createAsyncThunk('forms/create', async (formData, thunkAPI) => {
     try {
         const token = thunkAPI.getState().auth.user.token
-        return await formService.createForm(goalData, token)
+        return await formService.createForm(formData, token)
     } catch (error) {
         const message = ((error.response && error.response.data && error.response.data.message) || error.message || error.toString())
         return thunkAPI.rejectWithValue(message)
@@ -25,6 +25,17 @@ export const getForms = createAsyncThunk('forms/getAll', async (_, thunkAPI) => 
     try {
         const token = thunkAPI.getState().auth.user.token
         return await formService.getForms(token)
+    } catch (error) {
+        const message = ((error.response && error.response.data && error.response.data.message) || error.message || error.toString())
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
+// Update form
+export const updateForm = createAsyncThunk('forms/update', async (formData, thunkAPI) => {
+    try {
+        const token = thunkAPI.getState().auth.user.token
+        return await formService.updateForm(formData.text, formData.formID, token)
     } catch (error) {
         const message = ((error.response && error.response.data && error.response.data.message) || error.message || error.toString())
         return thunkAPI.rejectWithValue(message)
@@ -85,6 +96,19 @@ export const formSlice = createSlice({
                 state.forms = state.forms.filter((form) => form._id !== action.payload.id)
             })
             .addCase(deleteForm.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
+            .addCase(updateForm.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(updateForm.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                state.forms = state.forms.filter((form) => form._id === action.payload.id)
+            })
+            .addCase(updateForm.rejected, (state, action) => {
                 state.isLoading = false
                 state.isError = true
                 state.message = action.payload

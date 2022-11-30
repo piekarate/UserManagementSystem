@@ -32,13 +32,20 @@ function Header() {
                     </li>
                 ) : (
                     <>
-                    <button className='btn'>
-                        <FaListAlt />
-                    </button>
+                    <li>
+                        <Link to='/createForm'>
+                            <FaListAlt />
+                        </Link>
+                    </li>
                     <li>
                         <button className='btn' onClick={onLogout}>
                             <FaSignOutAlt /> Logout
                         </button>
+                    </li>
+                    <li>
+                        <Link to='/UserInfo'>
+                            <FaUser /> 
+                        </Link>
                     </li>
                     </>
                 )}

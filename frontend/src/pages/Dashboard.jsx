@@ -21,8 +21,7 @@ function Dashboard() {
       {user && user.privileges ? (  
         <AdminDashboard user={user}/>
       ) : (
-        <UserDashboard user={user}/>
-      
+        <UserDashboard user={user}/>   
       )}
     </>
   )

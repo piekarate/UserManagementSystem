@@ -1,5 +1,5 @@
-import FormForm from '../FormForm'
 import { useDispatch, useSelector } from 'react-redux'
+import {useNavigate} from 'react-router-dom'
 import { useEffect } from 'react'
 import { getForms, reset } from '../../features/forms/formSlice'
 import FormItem from '../FormItem'
@@ -8,6 +8,7 @@ import FormItem from '../FormItem'
 const UserDashboard = ({ user }) => {
 
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const {forms, isLoading, isError, message} = useSelector((state) => state.forms)
 
@@ -34,13 +35,15 @@ const UserDashboard = ({ user }) => {
         <p>Dashboard</p>
       </section>
 
-      <FormForm />
-
       <section className='content'>
         {forms.length > 0 ? (
           <div className="forms">
             {forms.map((form) => (
-              <FormItem key={form._id} form={form}/>
+              <div onClick={() => {navigate('/editForm', {state: {
+                form: form
+              }})}}>
+                <FormItem key={form._id} form={form}/>
+              </div>
             ))}
           </div>
         ) : (<h3> You have not completed any forms </h3>)}

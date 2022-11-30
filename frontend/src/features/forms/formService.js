@@ -28,6 +28,21 @@ const getForms = async (token) => {
     return response.data
 }
 
+// Update form
+
+const updateForm = async (formData, id, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+    
+
+    const response = await axios.put(API_URL + id, {text: formData}, config)
+
+    return response.data
+}
+
 // Delete form
 const deleteForm = async (id, token) => {
     const config = {
@@ -44,6 +59,7 @@ const deleteForm = async (id, token) => {
 const formService = {
     createForm,
     getForms,
+    updateForm,
     deleteForm
 }
 
