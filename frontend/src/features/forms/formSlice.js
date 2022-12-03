@@ -54,7 +54,7 @@ export const deleteForm = createAsyncThunk('forms/delete', async (id, thunkAPI) 
 })
 
 export const formSlice = createSlice({
-    name: 'form',
+    name: 'resources',
     initialState,
     reducers: {
         reset: (state) => initialState

@@ -10,7 +10,7 @@ const UserDashboard = ({ user }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const {forms, isLoading, isError, message} = useSelector((state) => state.forms)
+  const {forms, isLoading, isError, message} = useSelector((state) => state.userResources)
 
   useEffect(() => {
     if(isError) {
